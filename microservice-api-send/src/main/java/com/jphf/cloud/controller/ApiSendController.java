@@ -21,30 +21,29 @@ import reactor.core.publisher.Mono;
 public class ApiSendController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ApiSendController.class);
-	
+
 	private KafkaMessaingService kafkaMessaingService;
-	
+
 	@Autowired
 	public ApiSendController(KafkaMessaingService kafkaMessaingService) {
 		super();
 		this.kafkaMessaingService = kafkaMessaingService;
 	}
-	
+
 	@GetMapping
 	public Mono<String> get() {
 		return Mono.just("work");
 	}
-	
+
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void send(@RequestBody UserMessage messageMono) {
-		logger.info("{}", messageMono);
-		kafkaMessaingService.sendMessage(messageMono);
-//		logger.info("tttttttttt");
-//		messageMono.subscribe(m->{
-//		logger.info("aaaaaaaa");
-//			logger.info("{}", m);
-//			kafkaMessaingService.sendMessage(m);
-//		});
+	public Mono<Void> send(@RequestBody Mono<UserMessage> messageMono) {
+
+		return messageMono.flatMap(m -> {
+			logger.info("{}", m);
+			kafkaMessaingService.sendMessage(m);
+			return Mono.empty();
+		});
+
 	}
 }

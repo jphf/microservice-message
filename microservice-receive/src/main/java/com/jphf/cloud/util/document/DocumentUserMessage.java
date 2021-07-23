@@ -6,8 +6,10 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.jphf.cloud.shared.User;
+
 @Document
-public class Owner {
+public class DocumentUserMessage {
 	@Id
 	private Long userId;
 
