@@ -1,0 +1,46 @@
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-gap: 10px;
+	grid-auto-rows: minmax(100px, auto);
+}
+
+.wrapper>div {
+	padding: 15px;
+	border: 1px solid black;
+}
+
+.title {
+	grid-column: 1/6;
+	grid-row: 1;
+}
+
+.user {
+	grid-column: 1;
+	grid-row: 2/7;
+}
+
+.screen {
+	grid-column: 2/6;
+	grid-row: 2/6
+}
+
+.message {
+	grid-column: 2/6;
+	grid-row: 6/7
+}
+
+.divWithScroll{
+	overflow-y: auto;
+}
+
+textarea {
+	width: 90%;
+	height: 100px;
+}
+
+button[type="submit"] {
+	vertical-align: top;
+	width: 8%;
+	height: 100px;
+}

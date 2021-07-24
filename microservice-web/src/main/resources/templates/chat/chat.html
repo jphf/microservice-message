@@ -3,8 +3,38 @@
 <head>
 <meta charset="BIG5">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
-chat
+
+	<div class="wrapper">
+		<div class="title">
+			<h2>Message</h2>
+			<p>
+				<a href="/logout">Logout</a>
+			</p>
+		</div>
+		<div class="user divWithScroll">
+			<ul id="userList"></ul>
+		</div>
+		<div class="screen divWithScroll">
+			<ul id="messageList"></ul>
+		</div>
+		<div class="message">
+			<form id="dialogueForm" name="dialogueForm" nameForm="dialogueForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<textarea id="chatMessage" rows=5
+							placeholder="Enter a message...." autocomplete="off"
+							class="form-control"></textarea>
+
+						<button type="submit">Send</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/js/script.js"></script>
 </body>
 </html>

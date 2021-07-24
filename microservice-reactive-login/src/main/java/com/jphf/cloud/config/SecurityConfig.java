@@ -47,13 +47,4 @@ public class SecurityConfig {
 	      .and().build();
 	}
 	
-//	@Bean
-//	public MapReactiveUserDetailsService userDetailsService() {
-//	    UserDetails user = User
-//	      .withUsername("user")
-//	      .password(encoder().encode("password"))
-//	      .roles("USER")
-//	      .build();
-//	    return new MapReactiveUserDetailsService(user);
-//	}
 }

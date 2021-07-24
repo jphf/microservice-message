@@ -10,6 +10,27 @@ spring:
     password: "1234"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  cloud:
+    stream:
+      binders:
+        defaultRabbit:
+          type: rabbit
+          environment:
+            spring:
+                rabbitmq:
+                  host: localhost
+                  port: 5672
+                  username: guest
+                  password: guest
+      bindings:
+        receivedMessage-in-0:
+          destination: websocketMessage
+          binder: defaultRabbit
+        sentMessage-out-0:
+          destination: websocketMessage
+          binder: defaultRabbit
+
+
 eureka:
   client:
     service-url:
