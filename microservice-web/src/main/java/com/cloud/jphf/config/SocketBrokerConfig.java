@@ -11,18 +11,20 @@ import com.cloud.jphf.util.data.Constants;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
+public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer{
 	
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/message");
+		registry.addEndpoint(Constants.SECURED_CHAT_ROOM).withSockJS();
 	}
 	
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		registry.enableStompBrokerRelay(Constants.SECURED_CHAT_SPECIFIC_USER).setRelayHost("localhost").setRelayPort(61613).setClientLogin("guest").setClientPasscode("guest");
-		registry.setApplicationDestinationPrefixes("/app");
+//		registry.enableSimpleBroker(Constants.SECURED_CHAT_SPECIFIC_USER, Constants.SECURED_CHAT_FRIENDS);
+		registry.setApplicationDestinationPrefixes("/spring-security-mvc-socket");
 		registry.setUserDestinationPrefix("/secured/user");
 	}
+	
 }
