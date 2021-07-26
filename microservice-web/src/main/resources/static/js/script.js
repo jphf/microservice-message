@@ -3,8 +3,6 @@
  */
 
 var SECURED_CHAT_ROOM = '/secured/room';
-var SECURED_CHAT_SPECIFIC_USER = '/queue/specific-user';
-
 
 var sendEndpoint;
 var stompClient;

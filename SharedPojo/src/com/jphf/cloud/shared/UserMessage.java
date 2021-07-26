@@ -1,24 +1,24 @@
 package com.jphf.cloud.shared;
 
 public class UserMessage {
-	private User sender;
-	private User receiver;
+	private String fromUsername;
+	private String toUsername;
 	private Message message;
 
-	public User getSender() {
-		return sender;
+	public String getFromUsername() {
+		return fromUsername;
 	}
 
-	public void setSender(User sender) {
-		this.sender = sender;
+	public void setFromUsername(String fromUsername) {
+		this.fromUsername = fromUsername;
 	}
 
-	public User getReceiver() {
-		return receiver;
+	public String getToUsername() {
+		return toUsername;
 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+	public void setToUsername(String toUsername) {
+		this.toUsername = toUsername;
 	}
 
 	public Message getMessage() {

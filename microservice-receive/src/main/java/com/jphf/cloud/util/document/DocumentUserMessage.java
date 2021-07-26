@@ -3,31 +3,42 @@ package com.jphf.cloud.util.document;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.jphf.cloud.shared.User;
 
 @Document
 public class DocumentUserMessage {
 	@Id
-	private Long userId;
+	private ObjectId id;
 
-	private Map<Long, Sender> senders = new HashMap<>();
+	@Indexed
+	private String username;
 
-	public Long getUserId() {
-		return userId;
+	private Map<String, Sender> senders = new HashMap<>();
+
+	public ObjectId getId() {
+		return id;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
-	public Map<Long, Sender> getSenders() {
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Map<String, Sender> getSenders() {
 		return senders;
 	}
 
-	public void setSenders(Map<Long, Sender> senders) {
+	public void setSenders(Map<String, Sender> senders) {
 		this.senders = senders;
 	}
 

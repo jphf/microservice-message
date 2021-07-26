@@ -21,6 +21,25 @@ spring:  application:    name: microservice-receive
       port: 27017
       database: message
 
+  cloud:
+    stream:
+      binders:
+        defaultRabbit:
+          type: rabbit
+          environment:
+            spring:
+                rabbitmq:
+                  host: localhost
+                  port: 5672
+                  username: guest
+                  password: guest
+      bindings:
+        sentMessage-out-0:
+          destination: websocketMessage
+          binder: defaultRabbit
+          group: receive
+
+
 eureka:
   client:
     service-url:

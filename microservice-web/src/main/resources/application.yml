@@ -26,6 +26,7 @@ spring:
         receivedMessage-in-0:
           destination: websocketMessage
           binder: defaultRabbit
+          group: receive
         sentMessage-out-0:
           destination: websocketMessage
           binder: defaultRabbit

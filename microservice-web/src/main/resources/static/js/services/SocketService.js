@@ -1,6 +1,7 @@
 'use strict';
 
 var SECURED_CHAT_SPECIFIC_USER = '/queue/specific-user';
+var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/queue/specific-user-friends';
 
 var idHelper = function(context) {
 	return document.getElementById(context);

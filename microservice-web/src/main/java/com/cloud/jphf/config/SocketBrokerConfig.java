@@ -21,7 +21,7 @@ public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer{
 	
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableStompBrokerRelay(Constants.SECURED_CHAT_SPECIFIC_USER).setRelayHost("localhost").setRelayPort(61613).setClientLogin("guest").setClientPasscode("guest");
+		registry.enableStompBrokerRelay(Constants.SECURED_CHAT_SPECIFIC_USER, Constants.SECURED_CHAT_SPECIFIC_USER_FRIENDS).setRelayHost("localhost").setRelayPort(61613).setClientLogin("guest").setClientPasscode("guest");
 //		registry.enableSimpleBroker(Constants.SECURED_CHAT_SPECIFIC_USER, Constants.SECURED_CHAT_FRIENDS);
 		registry.setApplicationDestinationPrefixes("/spring-security-mvc-socket");
 		registry.setUserDestinationPrefix("/secured/user");
