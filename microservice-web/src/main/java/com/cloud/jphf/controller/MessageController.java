@@ -32,9 +32,8 @@ public class MessageController {
 
 		OutputMessage out = new OutputMessage(msg.getFrom(), msg.getText(),
 				new SimpleDateFormat("HH:mm").format(new Date()));
-//		simpMessagingTemplate.convertAndSend(Constants.SECURED_CHAT_SPECIFIC_USER, out);
+
 		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
-//		simpMessagingTemplate.convertAndSendToUser(msg.getTo(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 		simpMessagingTemplate.convertAndSendToUser("test", Constants.SECURED_CHAT_SPECIFIC_USER, out);
 	}
 

@@ -34,13 +34,3 @@ window.onload = function() {
 	});
 	
 };
-
-
-
-function connectionSuccess() {
-	stompClient.subscribe('/topic/javainuse', onMessageReceived);
-	stompClient.send("/app/chat.newUser", {}, JSON.stringify({
-		sender: name,
-		type: 'newUser'
-	}))
-}
