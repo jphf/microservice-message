@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 import com.cloud.jphf.util.data.Constants;
@@ -46,7 +47,16 @@ public class MessageController {
 		userMessage.setText(msg.getText());
 		userMessage.setCreatedAt(now);
 		sendFeignClient.send(userMessage);
-//		simpMessagingTemplate.convertAndSendToUser("test", Constants.SECURED_CHAT_SPECIFIC_USER, out);
+		simpMessagingTemplate.convertAndSendToUser("test", Constants.SECURED_CHAT_SPECIFIC_USER, out);
+	}
+
+	@SubscribeMapping(Constants.SECURED_CHAT_SPECIFIC_USER_FRIENDS)
+	public void sendFriends(Principal user) {
+		logger.info("aaaaaaaaaaaaaaaaa");
+		Date now = new Date();
+		OutputMessage out = new OutputMessage("admin", "friends", new SimpleDateFormat("HH:mm").format(now));
+//		return out;
+		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER_FRIENDS, out);
 	}
 
 }

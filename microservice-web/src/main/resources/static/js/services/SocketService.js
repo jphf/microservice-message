@@ -1,7 +1,7 @@
 'use strict';
 
-var SECURED_CHAT_SPECIFIC_USER = '/queue/specific-user';
-var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/queue/specific-user-friends';
+var SECURED_CHAT_SPECIFIC_USER = '/user/queue/specific-user';
+var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/user/queue/specific-user-friends';
 
 var idHelper = function(context) {
 	return document.getElementById(context);
@@ -29,6 +29,8 @@ function SocketService() {
 				that.sessionId = url;
 			}
 			that.subscribeToSpecific(stompClient, SECURED_CHAT_SPECIFIC_USER, opts);
+			that.subscribeToSpecificFriends(stompClient, SECURED_CHAT_SPECIFIC_USER_FRIENDS, opts);
+			that.subscribeToSpecificFriends(stompClient, "/user/queue/test", opts);
 		});
 		return stompClient;
 	};
@@ -75,10 +77,17 @@ function SocketService() {
 	 */
 
 	that.subscribeToSpecific = function(client, url, opts) {
-		client.subscribe(url + "-user" + that.sessionId, function(msgOut) {
+		//		client.subscribe(url + "-user" + that.sessionId, function(msgOut) {
+		client.subscribe(url, function(msgOut) {
 			that.messageOut(JSON.parse(msgOut.body), opts);
 		});
 	};
 
-
+	that.subscribeToSpecificFriends = function(client, url, opts) {
+		client.subscribe(url, function(msgOut) {
+			console.log("fffffffffffffff");
+			console.log(msgOut.body);
+			//			that.messageOut(JSON.parse(msgOut.body), opts);
+		});
+	};
 }

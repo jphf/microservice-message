@@ -24,13 +24,13 @@ window.onload = function() {
 
 	var docChatMessage = document.getElementById('text');
 
-	document.getElementById("send").addEventListener("click", function(event){
+	document.getElementById("send").addEventListener("click", function(event) {
 		event.preventDefault();
-		
+
 		console.log(docChatMessage.value);
-		
-		s.sendMessage(opts, stompClient, "/spring-security-mvc-socket/"+sendEndpoint);
+
+		s.sendMessage(opts, stompClient, "/app" + sendEndpoint);
 		docChatMessage.value = "";
 	});
-	
+
 };
