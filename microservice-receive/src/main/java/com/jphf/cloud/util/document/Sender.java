@@ -6,15 +6,13 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.jphf.cloud.shared.Message;
-
 @Document
 public class Sender {
 
 	@Id
 	private long userId;
 
-	private List<Message> messages = new ArrayList<Message>();
+	private List<String> messages = new ArrayList<String>();
 
 	public long getUserId() {
 		return userId;
@@ -24,11 +22,11 @@ public class Sender {
 		this.userId = userId;
 	}
 
-	public List<Message> getMessages() {
+	public List<String> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<Message> messages) {
+	public void setMessages(List<String> messages) {
 		this.messages = messages;
 	}
 

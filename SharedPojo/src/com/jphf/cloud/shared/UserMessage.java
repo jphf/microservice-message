@@ -1,32 +1,43 @@
 package com.jphf.cloud.shared;
 
+import java.util.Date;
+
 public class UserMessage {
-	private String fromUsername;
-	private String toUsername;
-	private Message message;
+	private String from;
+	private String to;
+	String text;
+	Date createdAt;
 
-	public String getFromUsername() {
-		return fromUsername;
+	public String getFrom() {
+		return from;
 	}
 
-	public void setFromUsername(String fromUsername) {
-		this.fromUsername = fromUsername;
+	public void setFrom(String from) {
+		this.from = from;
 	}
 
-	public String getToUsername() {
-		return toUsername;
+	public String getTo() {
+		return to;
 	}
 
-	public void setToUsername(String toUsername) {
-		this.toUsername = toUsername;
+	public void setTo(String to) {
+		this.to = to;
 	}
 
-	public Message getMessage() {
-		return message;
+	public String getText() {
+		return text;
 	}
 
-	public void setMessage(Message message) {
-		this.message = message;
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

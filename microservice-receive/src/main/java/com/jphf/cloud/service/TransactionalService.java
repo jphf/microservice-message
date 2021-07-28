@@ -31,10 +31,10 @@ public class TransactionalService {
 
 //	@Transactional
 	public Mono<Void> insert(UserMessage userMessage) {
-		String fromUsername = userMessage.getFromUsername();
-		String toUsername = userMessage.getToUsername();
+		String fromUsername = userMessage.getFrom();
+		String toUsername = userMessage.getTo();
 
-		Message message = userMessage.getMessage();
+		String text = userMessage.getText();
 
 		Mono<Void> r = userMessageRepository.findByUsername(toUsername).defaultIfEmpty(new DocumentUserMessage()).flatMap(doc -> {
 			Sender s = doc.getSenders().get(fromUsername);
@@ -42,7 +42,7 @@ public class TransactionalService {
 				s = new Sender();
 				doc.getSenders().put(fromUsername, s);
 			}
-			s.getMessages().add(message);
+			s.getMessages().add(text);
 			
 			return Mono.empty();
 		});
