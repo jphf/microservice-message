@@ -38,8 +38,11 @@ public class MessageService {
 		Update update = new Update();
 		update.addToSet("message", userMessage);
 
-		template.upsert(query, update, fromUsername);
-		template.upsert(query2, update, toUsername);
+		template.insert(userMessage, fromUsername);
+		template.insert(userMessage, toUsername);
+
+//		template.upsert(query, update, fromUsername);
+//		template.upsert(query2, update, toUsername);
 
 	}
 }

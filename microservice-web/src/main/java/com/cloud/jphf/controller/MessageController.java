@@ -63,7 +63,7 @@ public class MessageController {
 		userMessage.setFrom(user.getName());
 		userMessage.setTo(msg.getTo());
 		userMessage.setText(msg.getText());
-		userMessage.setCreatedAt(now);
+		userMessage.setCreatedAt(now.getTime());
 		sendFeignClient.send(userMessage);
 	}
 
@@ -71,6 +71,7 @@ public class MessageController {
 	public void welcomeMessage(Principal user) {
 		Date now = new Date();
 		OutputMessage out = new OutputMessage(user.getName(), "hello", new SimpleDateFormat("HH:mm").format(now));
+
 		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 	}
 

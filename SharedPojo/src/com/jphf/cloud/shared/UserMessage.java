@@ -6,7 +6,7 @@ public class UserMessage {
 	private String from;
 	private String to;
 	String text;
-	Date createdAt;
+	long createdAt;
 
 	public String getFrom() {
 		return from;
@@ -32,11 +32,11 @@ public class UserMessage {
 		this.text = text;
 	}
 
-	public Date getCreatedAt() {
+	public long getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 	}
 

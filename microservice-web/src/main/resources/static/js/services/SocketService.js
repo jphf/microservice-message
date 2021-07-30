@@ -60,11 +60,12 @@ function SocketService() {
 	};
 
 	that.userOut = function(msg, opts) {
-		var r = idHelper(opts.user), p = document.createElement('p');
-		p.style.wordWrap = 'break-word';
+		var r = idHelper(opts.user);
 
 		if (Array.isArray(msg)) {
 			msg.forEach(function(u) {
+				var p = document.createElement('p');
+				p.style.wordWrap = 'break-word';
 				p.appendChild(document.createTextNode(u.username));
 				p.addEventListener("click", function() {
 					idHelper(opts.to).value = u.username;
@@ -80,6 +81,8 @@ function SocketService() {
 				r.appendChild(p);
 			});
 		} else {
+			var p = document.createElement('p');
+			p.style.wordWrap = 'break-word';
 			p.appendChild(document.createTextNode(msg.username));
 			p.addEventListener("click", function() {
 				idHelper(opts.to).value = u.username;
