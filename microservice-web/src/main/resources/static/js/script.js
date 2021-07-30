@@ -8,12 +8,13 @@ var sendEndpoint;
 var stompClient;
 
 var opts = {
-	from: 'from',
 	to: 'to',
 	text: 'text',
 	disconnect: 'disconnect',
 	conversationDiv: 'conversationDiv',
-	response: 'response'
+	response: 'response',
+	user: 'user',
+	displayTo: 'displayTo'
 };
 
 var s = new SocketService();
@@ -28,6 +29,11 @@ window.onload = function() {
 		event.preventDefault();
 
 		console.log(docChatMessage.value);
+
+		var to = document.getElementById(opts.to).value;
+		if(!to){
+			alert("Must choose user first");
+		}
 
 		s.sendMessage(opts, stompClient, "/app" + sendEndpoint);
 		docChatMessage.value = "";

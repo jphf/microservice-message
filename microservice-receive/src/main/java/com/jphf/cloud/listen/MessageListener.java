@@ -3,13 +3,12 @@ package com.jphf.cloud.listen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import com.jphf.cloud.service.MessageService;
 import com.jphf.cloud.service.StreamService;
-import com.jphf.cloud.service.TransactionalService;
 import com.jphf.cloud.shared.UserMessage;
 
 @Component
@@ -18,10 +17,10 @@ public class MessageListener {
 	private static final Logger logger = LoggerFactory.getLogger(MessageListener.class);
 
 	StreamService streamService;
-	TransactionalService transactionalService;
+	MessageService transactionalService;
 
 	@Autowired
-	public MessageListener(StreamService streamService, TransactionalService transactionalService) {
+	public MessageListener(StreamService streamService, MessageService transactionalService) {
 		this.streamService = streamService;
 		this.transactionalService = transactionalService;
 	}
@@ -30,9 +29,11 @@ public class MessageListener {
 	public void handle(UserMessage userMessage, Acknowledgment acknowledgment) {
 		logger.info("{}", userMessage.getText());
 
-		streamService.publish(userMessage);
-		transactionalService.insert(userMessage).block();
+		
+		transactionalService.insert(userMessage);
 
+		streamService.publish(userMessage);
+		
 		acknowledgment.acknowledge();
 	}
 

@@ -7,8 +7,7 @@
 </head>
 <body th:with="context=@{/}">
 
-	<input type="hidden" id="from" value="jphf" />
-	<input type="hidden" id="to" value="to" />
+	<input type="hidden" id="to" />
 
 	<div class="wrapper">
 		<div class="title">
@@ -18,9 +17,11 @@
 			</p>
 		</div>
 		<div class="user divWithScroll">
-			<ul id="userList"></ul>
+			<p>To: <span id='displayTo'>None</span></p>
+			<p>Users:</p>
+			<div id='user'></div>
 		</div>
-		<div class="screen divWithScroll" id=response>
+		<div class="screen divWithScroll" id='response'>
 			
 		</div>
 		<div class="message">

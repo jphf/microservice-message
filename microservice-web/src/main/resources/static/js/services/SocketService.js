@@ -1,7 +1,7 @@
 'use strict';
 
-var SECURED_CHAT_SPECIFIC_USER = '/user/queue/specific-user';
-var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/user/queue/specific-user-friends';
+var SECURED_CHAT_SPECIFIC_USER = '/user/queue/message';
+var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/user/queue/friend';
 
 var idHelper = function(context) {
 	return document.getElementById(context);
@@ -12,6 +12,8 @@ function SocketService() {
 	var that = this;
 
 	that.sessionId = '';
+
+	var subscription;
 
 	/**
 	 * Generic methods.
@@ -28,9 +30,8 @@ function SocketService() {
 				console.log("Your current session is: " + url);
 				that.sessionId = url;
 			}
-			that.subscribeToSpecific(stompClient, SECURED_CHAT_SPECIFIC_USER, opts);
+
 			that.subscribeToSpecificFriends(stompClient, SECURED_CHAT_SPECIFIC_USER_FRIENDS, opts);
-			that.subscribeToSpecificFriends(stompClient, "/user/queue/test", opts);
 		});
 		return stompClient;
 	};
@@ -41,10 +42,8 @@ function SocketService() {
 
 	that.sendMessage = function(opts, stompClient, endpoint) {
 		var to = idHelper(opts.to).value;
-		var from = idHelper(opts.from).value;
 
 		var msg = {
-			'from': (from === undefined || from === null) ? to : from,
 			'to': (to === undefined || to === null) ? "ALL" : to,
 			'text': idHelper(opts.text).value
 		};
@@ -59,6 +58,36 @@ function SocketService() {
 		p.appendChild(document.createTextNode(msg.from + ': ' + msg.text + ' (' + msg.time + ')'));
 		r.appendChild(p);
 	};
+
+	that.userOut = function(msg, opts) {
+		var r = idHelper(opts.user), p = document.createElement('p');
+		p.style.wordWrap = 'break-word';
+
+		if (Array.isArray(msg)) {
+			msg.forEach(function(u) {
+				p.appendChild(document.createTextNode(u.username));
+				p.addEventListener("click", function() {
+					idHelper(opts.to).value = u.username;
+					idHelper(opts.displayTo).innerHTML = u.username;
+
+					if (subscription !== undefined && subscription !== null) {
+						subscription.unsubscribe();
+						subscription = null;
+					}
+					subscription = that.subscribeToSpecific(stompClient, SECURED_CHAT_SPECIFIC_USER, opts);
+
+				});
+				r.appendChild(p);
+			});
+		} else {
+			p.appendChild(document.createTextNode(msg.username));
+			p.addEventListener("click", function() {
+				idHelper(opts.to).value = u.username;
+				idHelper(opts.displayTo).innerHTML = u.username;
+			});
+			r.appendChild(p);
+		}
+	}
 
 	/**
 	 * Broadcast to All Users.
@@ -77,7 +106,6 @@ function SocketService() {
 	 */
 
 	that.subscribeToSpecific = function(client, url, opts) {
-		//		client.subscribe(url + "-user" + that.sessionId, function(msgOut) {
 		client.subscribe(url, function(msgOut) {
 			that.messageOut(JSON.parse(msgOut.body), opts);
 		});
@@ -87,7 +115,7 @@ function SocketService() {
 		client.subscribe(url, function(msgOut) {
 			console.log("fffffffffffffff");
 			console.log(msgOut.body);
-			//			that.messageOut(JSON.parse(msgOut.body), opts);
+			that.userOut(JSON.parse(msgOut.body), opts);
 		});
 	};
 }

@@ -1,22 +1,22 @@
 package com.jphf.cloud.config;
 
-import org.springframework.context.annotation.Bean;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
-import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
-import org.springframework.transaction.ReactiveTransactionManager;
-import org.springframework.transaction.reactive.TransactionalOperator;
+import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
 @Configuration
 public class MongoConfig {
-
-	@Bean
-	ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory databaseFactory) {
-		return new ReactiveMongoTransactionManager(databaseFactory);
-	}
 	
-	@Bean
-	TransactionalOperator transactionalOperator(ReactiveTransactionManager reactiveTransactionManager) {
-		return TransactionalOperator.create(reactiveTransactionManager);
-	}
+	@Autowired
+    private MappingMongoConverter mappingMongoConverter;
+
+    // remove _class
+    @PostConstruct
+    public void setUpMongoEscapeCharacterConversion() {
+        mappingMongoConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
+    }
+
 }
