@@ -2,28 +2,24 @@ package com.jphf.cloud.util.pojo;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.jphf.cloud.util.entity.User;
+import com.jphf.cloud.shared.User;
 
 public class RegistrationForm {
 
 	private String username;
 	private String password;
-	private String email;
-	
-	
-	
+
 	public RegistrationForm() {
 	}
 
-	public RegistrationForm(String username, String password, String email) {
+	public RegistrationForm(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
-		this.email = email;
 	}
-	
+
 	public User toUser(PasswordEncoder passwordEncoder) {
-		return new User(username, passwordEncoder.encode(password), email);
+		return new User(username, passwordEncoder.encode(password));
 	}
 
 	public String getUsername() {
@@ -42,13 +38,4 @@ public class RegistrationForm {
 		this.password = password;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	
 }

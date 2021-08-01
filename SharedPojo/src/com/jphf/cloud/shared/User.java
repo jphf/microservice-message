@@ -1,16 +1,23 @@
 package com.jphf.cloud.shared;
 
-public class User {
+import java.io.Serializable;
 
-	long id;
-	String username;
+public class User implements Serializable {
 
-	public long getId() {
-		return id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9083225523239996021L;
+
+	public User() {
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	String username;
+	String password;
+
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 
 	public String getUsername() {
@@ -18,8 +25,15 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-
 		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
