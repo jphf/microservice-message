@@ -7,6 +7,7 @@
 </head>
 <body th:with="context=@{/}">
 
+	<input type="hidden" id="from" th:value="${#authentication.getPrincipal().getUsername()}"/>
 	<input type="hidden" id="to" />
 
 	<div class="wrapper">

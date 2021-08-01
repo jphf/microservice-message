@@ -10,6 +10,7 @@ var sendEndpoint;
 var stompClient;
 
 var opts = {
+	from: 'from',
 	to: 'to',
 	text: 'text',
 	disconnect: 'disconnect',

@@ -51,10 +51,18 @@ function SocketService() {
 	};
 
 	that.messageOut = function(msg, opts) {
-		var r = idHelper(opts.response), p = document.createElement('p');
+		let r = idHelper(opts.response), p = document.createElement('p');
+		let from = idHelper(opts.from).value;
+
 		p.style.wordWrap = 'break-word';
 		if (msg.from) {
-			p.appendChild(document.createTextNode(msg.from + ': ' + msg.text + ' (' + msg.time + ')'));
+			if (msg.from != from) {
+				p.appendChild(document.createTextNode('(' + msg.time + ') ' + msg.text + " :" + msg.from));
+
+				p.classList.add('receive');
+			} else {
+				p.appendChild(document.createTextNode(msg.from + ": " + msg.text + ' (' + msg.time + ')'));
+			}
 		} else {
 			p.appendChild(document.createTextNode(msg.text));
 		}
@@ -62,43 +70,37 @@ function SocketService() {
 	};
 
 	that.userOut = function(msg, opts) {
-		var r = idHelper(opts.user);
+		let r = idHelper(opts.user);
 
-		if (Array.isArray(msg)) {
-			msg.forEach(function(u) {
-				var p = document.createElement('p');
-				p.style.wordWrap = 'break-word';
-				p.className = 'username';
-				p.appendChild(document.createTextNode(u.username));
-				p.addEventListener("click", function() {
-					idHelper(opts.to).value = u.username;
+		if (!Array.isArray(msg)) {
+			return;
+		}
 
-					if (chooseUsername != u.username) {
-						idHelper(opts.response).innerHTML = "";
-						that.sendUser(u.username, stompClient, "/app" + SECURED_CHAT_USER);
-						chooseUsername = u.username;
-
-						var elements = document.getElementsByClassName('username');
-						for (var i = 0; i < elements.length; i++) {
-							var element = elements[i];
-							element.classList.remove("userChosed");
-						}
-						p.classList.add("userChosed");
-					}
-
-				});
-				r.appendChild(p);
-			});
-		} else {
+		msg.forEach(function(u) {
 			var p = document.createElement('p');
 			p.style.wordWrap = 'break-word';
-			p.appendChild(document.createTextNode(msg.username));
+			p.className = 'username';
+			p.appendChild(document.createTextNode(u.username));
 			p.addEventListener("click", function() {
 				idHelper(opts.to).value = u.username;
-				idHelper(opts.displayTo).innerHTML = u.username;
+
+				if (chooseUsername != u.username) {
+					idHelper(opts.response).innerHTML = "";
+					that.sendUser(u.username, stompClient, "/app" + SECURED_CHAT_USER);
+					chooseUsername = u.username;
+
+					var elements = document.getElementsByClassName('username');
+					for (var i = 0; i < elements.length; i++) {
+						var element = elements[i];
+						element.classList.remove("userChosed");
+					}
+					this.classList.add("userChosed");
+				}
+
 			});
 			r.appendChild(p);
-		}
+		});
+
 	}
 
 	/**
