@@ -62,7 +62,7 @@ public class MessageController {
 
 		messages.forEach(m -> {
 			Date time = new Date(m.getCreatedAt());
-			OutputMessage msg = new OutputMessage(m.getFrom(), m.getText(), new SimpleDateFormat("HH:mm").format(time));
+			OutputMessage msg = new OutputMessage(m.getFrom(), m.getTo(), m.getText(), new SimpleDateFormat("HH:mm").format(time));
 			simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, msg);
 		});
 	}
@@ -75,10 +75,10 @@ public class MessageController {
 		logger.info("{}", headerAccessor.getSessionAttributes().get("toUsername"));
 
 		Date now = new Date();
-		OutputMessage out = new OutputMessage(user.getName(), msg.getText(), dateFormat.format(now));
+		OutputMessage out = new OutputMessage(user.getName(), msg.getTo(), msg.getText(), dateFormat.format(now));
 
 		if ("".equals(msg.getTo()) || msg.getTo() == null) {
-			out = new OutputMessage(user.getName(), "Empty", dateFormat.format(now));
+			out = new OutputMessage(null, user.getName(), "Empty", dateFormat.format(now));
 			simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 			return;
 		}
@@ -96,8 +96,7 @@ public class MessageController {
 	@SubscribeMapping(Constants.SECURED_CHAT_SPECIFIC_USER)
 	public void welcomeMessage(Principal user) {
 		Date now = new Date();
-		OutputMessage out = new OutputMessage(user.getName(), "Choose user to chat",
-				new SimpleDateFormat("HH:mm").format(now));
+		OutputMessage out = new OutputMessage(null, user.getName(), "Choose user", new SimpleDateFormat("HH:mm").format(now));
 
 		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 	}

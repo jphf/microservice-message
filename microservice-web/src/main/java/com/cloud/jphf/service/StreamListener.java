@@ -36,7 +36,7 @@ public class StreamListener {
 				logger.info("receivedMessage");
 				logger.info("{} {} {}", t.getFrom(), t.getTo(), t.getText());
 
-				OutputMessage out = new OutputMessage(t.getTo(), t.getText(),
+				OutputMessage out = new OutputMessage(t.getTo(), t.getFrom(), t.getText(),
 						new SimpleDateFormat("HH:mm").format(t.getCreatedAt()));
 
 				simpMessagingTemplate.convertAndSendToUser(t.getTo(), Constants.SECURED_CHAT_SPECIFIC_USER, out);

@@ -53,7 +53,11 @@ function SocketService() {
 	that.messageOut = function(msg, opts) {
 		var r = idHelper(opts.response), p = document.createElement('p');
 		p.style.wordWrap = 'break-word';
-		p.appendChild(document.createTextNode(msg.from + ': ' + msg.text + ' (' + msg.time + ')'));
+		if (msg.from) {
+			p.appendChild(document.createTextNode(msg.from + ': ' + msg.text + ' (' + msg.time + ')'));
+		} else {
+			p.appendChild(document.createTextNode(msg.text));
+		}
 		r.appendChild(p);
 	};
 
@@ -64,16 +68,22 @@ function SocketService() {
 			msg.forEach(function(u) {
 				var p = document.createElement('p');
 				p.style.wordWrap = 'break-word';
-				p.className = 'user';
+				p.className = 'username';
 				p.appendChild(document.createTextNode(u.username));
 				p.addEventListener("click", function() {
 					idHelper(opts.to).value = u.username;
-					idHelper(opts.displayTo).innerHTML = u.username;
 
 					if (chooseUsername != u.username) {
 						idHelper(opts.response).innerHTML = "";
 						that.sendUser(u.username, stompClient, "/app" + SECURED_CHAT_USER);
 						chooseUsername = u.username;
+
+						var elements = document.getElementsByClassName('username');
+						for (var i = 0; i < elements.length; i++) {
+							var element = elements[i];
+							element.classList.remove("userChosed");
+						}
+						p.classList.add("userChosed");
 					}
 
 				});
