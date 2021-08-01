@@ -1,7 +1,5 @@
 package com.jphf.cloud.shared;
 
-import java.util.Date;
-
 public class UserMessage {
 	private String from;
 	private String to;

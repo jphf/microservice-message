@@ -1,7 +1,6 @@
 'use strict';
 
-var SECURED_CHAT_SPECIFIC_USER = '/user/queue/message';
-var SECURED_CHAT_SPECIFIC_USER_FRIENDS = '/user/queue/friend';
+var SECURED_CHAT_USER = '/secured/user';
 
 var idHelper = function(context) {
 	return document.getElementById(context);
@@ -11,27 +10,17 @@ function SocketService() {
 
 	var that = this;
 
-	that.sessionId = '';
-
-	var subscription;
-
+	var chooseUsername = null;
 	/**
 	 * Generic methods.
 	 */
 
-	that.connect = function(endpoint, opts, isBroadcastAll) {
+	that.connect = function(endpoint, opts, callback) {
 		var socket = new SockJS(endpoint), stompClient = Stomp.over(socket);
 		stompClient.connect({}, function(frame) {
-
-			if (!isBroadcastAll) {
-				var url = stompClient.ws._transport.url;
-				console.log(stompClient.ws._transport.url);
-				url = /\/([^\/]+)\/websocket/.exec(url)[1]
-				console.log("Your current session is: " + url);
-				that.sessionId = url;
+			if (callback) {
+				callback(frame);
 			}
-
-			that.subscribeToSpecificFriends(stompClient, SECURED_CHAT_SPECIFIC_USER_FRIENDS, opts);
 		});
 		return stompClient;
 	};
@@ -52,6 +41,15 @@ function SocketService() {
 		stompClient.send(endpoint, {}, JSON.stringify(msg));
 	};
 
+	that.sendUser = function(username, stompClient, endpoint) {
+		var msg = {
+			'username': username
+		};
+
+		console.log(JSON.stringify(msg));
+		stompClient.send(endpoint, {}, JSON.stringify(msg));
+	};
+
 	that.messageOut = function(msg, opts) {
 		var r = idHelper(opts.response), p = document.createElement('p');
 		p.style.wordWrap = 'break-word';
@@ -66,16 +64,17 @@ function SocketService() {
 			msg.forEach(function(u) {
 				var p = document.createElement('p');
 				p.style.wordWrap = 'break-word';
+				p.className = 'user';
 				p.appendChild(document.createTextNode(u.username));
 				p.addEventListener("click", function() {
 					idHelper(opts.to).value = u.username;
 					idHelper(opts.displayTo).innerHTML = u.username;
 
-					if (subscription !== undefined && subscription !== null) {
-						subscription.unsubscribe();
-						subscription = null;
+					if (chooseUsername != u.username) {
+						idHelper(opts.response).innerHTML = "";
+						that.sendUser(u.username, stompClient, "/app" + SECURED_CHAT_USER);
+						chooseUsername = u.username;
 					}
-					subscription = that.subscribeToSpecific(stompClient, SECURED_CHAT_SPECIFIC_USER, opts);
 
 				});
 				r.appendChild(p);
@@ -91,18 +90,6 @@ function SocketService() {
 			r.appendChild(p);
 		}
 	}
-
-	/**
-	 * Broadcast to All Users.
-	 */
-
-	that.subscribeToAll = function(client, url, opts) {
-		idHelper('subscribeAll').disabled = true;
-		idHelper('subscribeSpecific').disabled = true;
-		client.subscribe(url, function(msgOut) {
-			that.messageOut(JSON.parse(msgOut.body), opts);
-		});
-	};
 
 	/**
 	 * Broadcast to Specific User.

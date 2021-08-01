@@ -1,7 +1,5 @@
 package com.jphf.cloud.history.service;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -16,7 +14,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 public class MessageService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
 
 	HistoryConfig historyConfig;
@@ -43,7 +41,7 @@ public class MessageService {
 		query.addCriteria(new Criteria().orOperator(fromTo1, fromTo2));
 
 		logger.debug("{}", query);
-		
+
 		return this.template.find(query, UserMessage.class, username).takeLast(historyConfig.getBatchSize());
 	}
 

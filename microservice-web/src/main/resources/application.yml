@@ -10,6 +10,11 @@ spring:
     password: "1234"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  session:
+    store-type: redis
+    timeout: 2592000
+    redis:      namespace: message:spring:session
+
   cloud:
     stream:
       binders:

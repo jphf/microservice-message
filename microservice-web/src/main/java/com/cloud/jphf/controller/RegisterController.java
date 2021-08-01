@@ -32,7 +32,7 @@ public class RegisterController {
 	}
 
 	@PostMapping
-	public String processRegistration(RegistrationForm form, Model model, Errors errors) throws Exception{
+	public String processRegistration(RegistrationForm form, Model model, Errors errors) throws Exception {
 
 		User user = userRepository.findByUsername(form.getUsername());
 		if (user != null) {
