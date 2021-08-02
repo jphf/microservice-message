@@ -1,8 +1,7 @@
 package com.jphf.cloud.shared;
 
-public class UserMessage {
-	private String from;
-	private String to;
+public class Message {
+	String from;
 	String text;
 	long createdAt;
 
@@ -12,14 +11,6 @@ public class UserMessage {
 
 	public void setFrom(String from) {
 		this.from = from;
-	}
-
-	public String getTo() {
-		return to;
-	}
-
-	public void setTo(String to) {
-		this.to = to;
 	}
 
 	public String getText() {
@@ -37,5 +28,4 @@ public class UserMessage {
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 	}
-
 }

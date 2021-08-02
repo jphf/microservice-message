@@ -3,6 +3,7 @@ package com.jphf.cloud.controller;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.Room;
+import com.jphf.cloud.shared.RoomMessage;
 import com.jphf.cloud.util.data.Constants;
 import com.jphf.cloud.util.feign.HistoryFeignClient;
 import com.jphf.cloud.util.feign.SendFeignClient;
@@ -55,13 +57,16 @@ public class MessageController {
 
 		logger.debug("choose user: {}", toUsername);
 
-		headerAccessor.getSessionAttributes().put("toUsername", toUsername);
+		List<String> usernames = Arrays.asList(user.getName(), toUsername);
+		Room room = historyFeignClient.getOrCreateRoom(usernames);
 
-		List<UserMessage> messages = historyFeignClient.get(user.getName(), toUsername, new Date().getTime());
+		headerAccessor.getSessionAttributes().put("room", room);
+
+		List<RoomMessage> messages = historyFeignClient.get(room.get_id(), new Date().getTime());
 
 		messages.forEach(m -> {
 			Date time = new Date(m.getCreatedAt());
-			OutputMessage msg = new OutputMessage(m.getFrom(), m.getTo(), m.getText(),
+			OutputMessage msg = new OutputMessage(m.getFrom(), m.getText(),
 					new SimpleDateFormat("HH:mm").format(time));
 			simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, msg);
 		});
@@ -70,24 +75,24 @@ public class MessageController {
 	@MessageMapping(Constants.SECURED_CHAT_ROOM)
 	public void sendSpecific(@Payload Message msg, Principal user, @Header("simpSessionId") String sessionId,
 			SimpMessageHeaderAccessor headerAccessor) {
-		logger.debug("{} {} {}", user.getName(), msg.getTo(), msg.getText());
-
-		logger.debug("{}", headerAccessor.getSessionAttributes().get("toUsername"));
-
+		logger.debug("{} {}", user.getName(), msg.getText());
+		
+		Room room = (Room) headerAccessor.getSessionAttributes().get("room");
+		
 		Date now = new Date();
-		OutputMessage out = new OutputMessage(user.getName(), msg.getTo(), msg.getText(), dateFormat.format(now));
+		OutputMessage out = new OutputMessage(user.getName(), msg.getText(), dateFormat.format(now));
 
-		if ("".equals(msg.getTo()) || msg.getTo() == null) {
-			out = new OutputMessage(null, user.getName(), "Empty", dateFormat.format(now));
+		if ("".equals(msg.getText()) || msg.getText() == null) {
+			out = new OutputMessage(null, "Empty", dateFormat.format(now));
 			simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 			return;
 		}
 
-		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
+//		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 
-		UserMessage userMessage = new UserMessage();
+		RoomMessage userMessage = new RoomMessage();
+		userMessage.setRoom(room);
 		userMessage.setFrom(user.getName());
-		userMessage.setTo(msg.getTo());
 		userMessage.setText(msg.getText());
 		userMessage.setCreatedAt(now.getTime());
 		sendFeignClient.send(userMessage);
@@ -96,7 +101,7 @@ public class MessageController {
 	@SubscribeMapping(Constants.SECURED_CHAT_SPECIFIC_USER)
 	public void welcomeMessage(Principal user) {
 		Date now = new Date();
-		OutputMessage out = new OutputMessage(null, user.getName(), "Choose user",
+		OutputMessage out = new OutputMessage(null, "Choose user",
 				new SimpleDateFormat("HH:mm").format(now));
 
 		logger.info("{}", user.getName());

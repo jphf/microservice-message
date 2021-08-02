@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.Room;
+import com.jphf.cloud.shared.RoomMessage;
 
 @FeignClient(name = "microservice-history")
 public interface HistoryFeignClient {
 	@RequestMapping(value = "/history", method = RequestMethod.GET)
-	public List<UserMessage> get(@RequestParam("username") String username, @RequestParam("username2") String username2,
-			@RequestParam("before") long before);
+	public List<RoomMessage> get(@RequestParam("roomId") String roomId, @RequestParam("before") long before);
+
+	@RequestMapping(value = "/room", method = RequestMethod.GET)
+	public Room getOrCreateRoom(@RequestParam("username") List<String> usernames);
 }

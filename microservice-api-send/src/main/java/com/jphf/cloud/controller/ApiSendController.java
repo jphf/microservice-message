@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jphf.cloud.service.KafkaMessaingService;
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.RoomMessage;
 
 import reactor.core.publisher.Mono;
 
@@ -37,7 +37,7 @@ public class ApiSendController {
 
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Mono<Void> send(@RequestBody Mono<UserMessage> messageMono) {
+	public Mono<Void> send(@RequestBody Mono<RoomMessage> messageMono) {
 
 		return messageMono.flatMap(m -> {
 			logger.info("{}", m);

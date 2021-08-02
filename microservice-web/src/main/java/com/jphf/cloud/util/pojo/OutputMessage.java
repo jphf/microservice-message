@@ -4,11 +4,10 @@ public class OutputMessage extends Message {
 	private String from;
 	private String time;
 
-	public OutputMessage(String from, String to, String text, String time) {
+	public OutputMessage(String from, String text, String time) {
 		this.from = from;
 		this.time = time;
 
-		setTo(to);
 		setText(text);
 	}
 

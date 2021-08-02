@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.RoomMessage;
 
 @Service
 public class StreamService {
@@ -16,7 +16,7 @@ public class StreamService {
 		this.streamBridge = streamBridge;
 	}
 
-	public void publish(UserMessage message) {
+	public void publish(RoomMessage message) {
 		streamBridge.send("sentMessage-out-0", message);
 	}
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jphf.cloud.history.service.MessageService;
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.RoomMessage;
 
 import reactor.core.publisher.Flux;
 
@@ -24,10 +24,10 @@ public class HistoryController {
 	}
 
 	@GetMapping
-	public Flux<UserMessage> getMessages(String username, String username2,
+	public Flux<RoomMessage> getMessages(String roomId,
 			long before) {
 
-		logger.info("username={}, username2={}, before={}", username, username2, before);
-		return this.messageService.getMessages(username, username2, before);
+		logger.info("roomId={}, before={}", roomId, before);
+		return this.messageService.getMessages(roomId, before);
 	}
 }

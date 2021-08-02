@@ -3,13 +3,11 @@ package com.jphf.cloud.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.Room;
+import com.jphf.cloud.shared.RoomMessage;
 
 @Service
 public class MessageService {
@@ -23,26 +21,8 @@ public class MessageService {
 	}
 
 	@Transactional
-	public void insert(UserMessage userMessage) {
-		String fromUsername = userMessage.getFrom();
-		String toUsername = userMessage.getTo();
-
-		logger.info("from={}, to={}", fromUsername, toUsername);
-
-		Query query = new Query();
-		query.addCriteria(Criteria.where("user").is(toUsername));
-
-		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("user").is(fromUsername));
-
-		Update update = new Update();
-		update.addToSet("message", userMessage);
-
-		template.insert(userMessage, fromUsername);
-		template.insert(userMessage, toUsername);
-
-//		template.upsert(query, update, fromUsername);
-//		template.upsert(query2, update, toUsername);
-
+	public void insert(RoomMessage userMessage) {
+		Room room = userMessage.getRoom();
+		template.insert(userMessage, room.get_id());
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.jphf.cloud.service.MessageService;
 import com.jphf.cloud.service.StreamService;
-import com.jphf.cloud.shared.UserMessage;
+import com.jphf.cloud.shared.RoomMessage;
 
 @Component
 public class MessageListener {
@@ -26,7 +26,7 @@ public class MessageListener {
 	}
 
 	@KafkaListener(topics = "messages.topic")
-	public void handle(UserMessage userMessage, Acknowledgment acknowledgment) {
+	public void handle(RoomMessage userMessage, Acknowledgment acknowledgment) {
 		logger.info("{}", userMessage.getText());
 
 		
