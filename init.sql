@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS `message_user`;
 USE `message_user`;
 --
 -- Table structure for table `user`
