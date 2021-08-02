@@ -36,7 +36,7 @@ public class StreamListener {
 			@Override
 			public void accept(RoomMessage t) {
 				// TODO Auto-generated method stub
-				logger.info("receivedMessage");
+				logger.debug("receivedMessage");
 
 				Message message = t.getMessage();
 
@@ -47,7 +47,7 @@ public class StreamListener {
 
 				List<String> usernames = room.getUsernames();
 				for (String username : usernames) {
-					logger.info("stomp {}", username);
+					logger.debug("stomp {}", username);
 					simpMessagingTemplate.convertAndSendToUser(username, Constants.SECURED_CHAT_SPECIFIC_USER, out);
 				}
 			}

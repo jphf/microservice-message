@@ -28,7 +28,7 @@ public class MessageListener {
 
 	@KafkaListener(topics = "messages.topic")
 	public void handle(RoomMessage userMessage, Acknowledgment acknowledgment) {
-		logger.info("{}", userMessage.getMessage().getText());
+		logger.debug("{}", userMessage.getMessage().getText());
 
 		transactionalService.insert(userMessage);
 

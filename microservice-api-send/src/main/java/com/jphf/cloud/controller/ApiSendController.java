@@ -40,7 +40,7 @@ public class ApiSendController {
 	public Mono<Void> send(@RequestBody Mono<RoomMessage> messageMono) {
 
 		return messageMono.flatMap(m -> {
-			logger.info("{}", m);
+			logger.debug("{}", m);
 			kafkaMessaingService.sendMessage(m);
 			return Mono.empty();
 		});

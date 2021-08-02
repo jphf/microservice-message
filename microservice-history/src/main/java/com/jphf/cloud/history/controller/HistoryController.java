@@ -28,7 +28,7 @@ public class HistoryController {
 	public Flux<Message> getMessages(String roomId,
 			long before) {
 
-		logger.info("roomId={}, before={}", roomId, before);
+		logger.debug("roomId={}, before={}", roomId, before);
 		return this.messageService.getMessages(roomId, before);
 	}
 }

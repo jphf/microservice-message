@@ -106,7 +106,7 @@ public class MessageController {
 		Date now = new Date();
 		OutputMessage out = new OutputMessage(null, "Choose user", new SimpleDateFormat("HH:mm").format(now));
 
-		logger.info("{}", user.getName());
+		logger.debug("{}", user.getName());
 
 		simpMessagingTemplate.convertAndSendToUser(user.getName(), Constants.SECURED_CHAT_SPECIFIC_USER, out);
 	}
