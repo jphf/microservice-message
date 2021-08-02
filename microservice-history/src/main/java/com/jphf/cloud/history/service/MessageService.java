@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.jphf.cloud.history.config.HistoryConfig;
+import com.jphf.cloud.shared.Message;
 import com.jphf.cloud.shared.Room;
-import com.jphf.cloud.shared.RoomMessage;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,7 +30,7 @@ public class MessageService {
 		this.template = template;
 	}
 
-	public Flux<RoomMessage> getMessages(String roomId, long before) {
+	public Flux<Message> getMessages(String roomId, long before) {
 		Query query = new Query();
 
 		Criteria time = Criteria.where("createdAt").lt(before);
@@ -39,7 +39,7 @@ public class MessageService {
 
 		logger.debug("{}", query);
 
-		return this.template.find(query, RoomMessage.class, roomId).takeLast(historyConfig.getBatchSize());
+		return this.template.find(query, Message.class, roomId).takeLast(historyConfig.getBatchSize());
 	}
 
 //	@Transactional

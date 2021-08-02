@@ -1,6 +1,6 @@
 package com.jphf.cloud.util.pojo;
 
-public class Message {
+public class InMessage {
 	private String text;
 
 	public String getText() {

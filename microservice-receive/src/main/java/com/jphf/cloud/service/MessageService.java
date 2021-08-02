@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jphf.cloud.shared.Message;
 import com.jphf.cloud.shared.Room;
 import com.jphf.cloud.shared.RoomMessage;
 
@@ -23,6 +24,8 @@ public class MessageService {
 	@Transactional
 	public void insert(RoomMessage userMessage) {
 		Room room = userMessage.getRoom();
-		template.insert(userMessage, room.get_id());
+		Message message = userMessage.getMessage();
+
+		template.insert(message, room.get_id());
 	}
 }

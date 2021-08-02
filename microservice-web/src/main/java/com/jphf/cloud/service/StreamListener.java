@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.jphf.cloud.shared.Message;
 import com.jphf.cloud.shared.Room;
 import com.jphf.cloud.shared.RoomMessage;
 import com.jphf.cloud.util.data.Constants;
@@ -36,15 +37,16 @@ public class StreamListener {
 			public void accept(RoomMessage t) {
 				// TODO Auto-generated method stub
 				logger.info("receivedMessage");
-				logger.info("{} {}", t.getFrom(), t.getText());
 
-				OutputMessage out = new OutputMessage(t.getFrom(), t.getText(),
-						new SimpleDateFormat("HH:mm").format(t.getCreatedAt()));
+				Message message = t.getMessage();
+
+				OutputMessage out = new OutputMessage(message.getFrom(), message.getText(),
+						new SimpleDateFormat("HH:mm").format(message.getCreatedAt()));
 
 				Room room = t.getRoom();
-				
+
 				List<String> usernames = room.getUsernames();
-				for(String username:usernames) {
+				for (String username : usernames) {
 					logger.info("stomp {}", username);
 					simpMessagingTemplate.convertAndSendToUser(username, Constants.SECURED_CHAT_SPECIFIC_USER, out);
 				}

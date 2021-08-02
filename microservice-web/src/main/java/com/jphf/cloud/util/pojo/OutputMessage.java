@@ -1,6 +1,6 @@
 package com.jphf.cloud.util.pojo;
 
-public class OutputMessage extends Message {
+public class OutputMessage extends InMessage {
 	private String from;
 	private String time;
 
